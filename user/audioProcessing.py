@@ -55,8 +55,8 @@ class AudioProceesing:
                 else:
                     stars = 0
 
-                adhigaram_number = str(int(kuralId) % 10 - 1)
-                kural_number = str(int(kuralId)-1)
+                adhigaram_number = str((int(kuralId) - 1) // 10)
+                kural_number = str((int(kuralId) - 1) % 10)
                 total = (int(session['user']['points']['stars']['total']) + stars)
                 - int(session['user']['points']['stars']['kurals_completed'][int(
                     adhigaram_number)][int(kural_number)])
@@ -123,8 +123,8 @@ class AudioProceesing:
                 else:
                     stars = 0
                     
-                adhigaram_number = str(int(kuralId) % 10 - 1)
-                kural_number = str(int(kuralId)-1)
+                adhigaram_number = str((int(kuralId) - 1) // 10)
+                kural_number = str((int(kuralId) - 1) % 10)
 
                 total = (int(session['user']['points']['stars']['total']) + stars)
                 - int(session['user']['points']['stars']['kurals_completed'][int(
@@ -142,5 +142,36 @@ class AudioProceesing:
                     adhigaram_number)][int(kural_number)] = stars
                 session.modified = True
 
-                return  str(stars)+","+str(count), 200
+                # Check for test trigger (every 10 kurals)
+                # Calculate total learned kurals (where stars > 0)
+                total_learned = 0
+                for adhigaram in session['user']['points']['stars']['kurals_completed']:
+                    for kural_stars in adhigaram:
+                        if kural_stars > 0:
+                            total_learned += 1
+                
+                take_test = False
+                test_type = ""
+                test_url = ""
+                
+                if total_learned > 0 and total_learned % 10 == 0:
+                    take_test = True
+                    import random
+                    if random.choice([True, False]):
+                        test_type = "fillups"
+                        # Generate a random kural ID for the test
+                        random_kural_id = random.randint(1, 1330)
+                        test_url = f"/fillups_game?kuralId={random_kural_id}"
+                    else:
+                        test_type = "drag_drop"
+                        random_kural_id = random.randint(1, 1330)
+                        test_url = f"/drag_drop_game?kuralId={random_kural_id}"
+
+                return jsonify({
+                    "stars": stars, 
+                    "count": count, 
+                    "take_test": take_test, 
+                    "test_type": test_type,
+                    "test_url": test_url
+                }), 200
                

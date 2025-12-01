@@ -1,0 +1,150 @@
+<html lang="ta">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - திருக்குறள் பழகு</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Meera+Inimai&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/basicStyle.css') }}">
+    <style>
+        body {
+            overflow: hidden;
+            /* Prevent body scroll */
+        }
+
+        .test-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 90vh;
+            /* Fixed height */
+            overflow-y: auto;
+            /* Scrollable */
+            margin-top: 20px;
+        }
+
+        /* Custom Scrollbar */
+        .test-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .test-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .test-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .test-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .question-card {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .question-text {
+            font-family: 'Meera Inimai', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .option-label {
+            display: block;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Meera Inimai', sans-serif;
+        }
+
+        .option-label:hover {
+            background: #e3f2fd;
+            border-color: #2196F3;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked+.option-label {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            font-family: 'Meera Inimai', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="navbar-container">
+            <nav class="">
+                <img src="../static/images/muthir-logo.png" alt="Muthir AI" height="120px" width="120px">
+            </nav>
+        </div>
+
+        <div class="test-container">
+            <h1 style="text-align: center; font-family: 'Meera Inimai', sans-serif;">அதிகாரத் தேர்வு (Adhigaram Test)
+            </h1>
+
+            <form action="/submit_adhigaram_test" method="POST">
+                {% for q in questions %}
+                <div class="question-card">
+                    <p class="question-text"><strong>கேள்வி {{ loop.index }}:</strong><br>{{ q.question_text }}</p>
+
+                    <div class="options-grid">
+                        {% set question_index = loop.index0 %}
+                        {% for opt in q.options %}
+                        <div>
+                            <input type="radio" id="q{{ question_index }}_opt{{ loop.index }}"
+                                name="answer_{{ question_index }}" value="{{ opt }}" required>
+                            <label class="option-label" for="q{{ question_index }}_opt{{ loop.index }}">{{ opt
+                                }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="submit-btn">தேர்வை சமர்ப்பிக்கவும் (Submit Test)</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

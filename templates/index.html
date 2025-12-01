@@ -17,7 +17,7 @@
     <div class="main-container">
         <div class="navbar-container">
             <nav class="">
-                 <img src="../static/images/muthir-logo.png" alt="Muthir AI" height="120px" width="120px">
+                <img src="../static/images/muthir-logo.png" alt="Muthir AI" height="120px" width="120px">
 
                 <ul class="">
                     <li class="nav-cell" id="nav-cell1">
@@ -94,11 +94,13 @@
                     <div class="points">
                         <div class="point-section">
                             <img class="point-diamond-img" src="../static/images/diamond.png" alt="Diamonds">
-                            <span class="point-count" id="diamond-points">{{session['user']['points']['diamonds']['total']}}</span>
+                            <span class="point-count"
+                                id="diamond-points">{{session['user']['points']['diamonds']['total']}}</span>
                         </div>
                         <div class="point-section">
                             <img class="point-coins-img" src="../static/images/star-icon.png" alt="Diamonds">
-                            <span class="point-count" id="diamond-points">{{session['user']['points']['stars']['total']}}</span>
+                            <span class="point-count"
+                                id="diamond-points">{{session['user']['points']['stars']['total']}}</span>
                         </div>
                     </div>
                 </div>
@@ -109,6 +111,8 @@
                     <div class="learn-play-btn-container">
                         <a class="learn-play-btn learn-btn" href="/select_adhigaram">கற்க</a>
                         <a class="learn-play-btn play-btn" href="/select_game">விளையாடு</a>
+                        <a class="learn-play-btn test-btn" href="/test_dashboard"
+                            style="background: #FF9800;">தேர்வு</a>
                     </div>
                     <div class="leaderboard">
                         <p class="leaderboard-title">Leaderboard
@@ -126,31 +130,13 @@
                                         src="../static/images/diamond.png" alt="Diamonds">
                                 </th>
                             </tr>
+                            {% for user in leaderboard %}
                             <tr>
-                                <td class="rank">#1</td>
-                                <td class="user-name">Kumar</td>
-                                <td class="diamond-points">423</td>
+                                <td class="rank">#{{ user.rank }}</td>
+                                <td class="user-name">{{ user.name }}</td>
+                                <td class="diamond-points">{{ user.points }}</td>
                             </tr>
-                            <tr>
-                                <td class="rank">#2</td>
-                                <td class="user-name">Linga</td>
-                                <td class="diamond-points">394</td>
-                            </tr>
-                            <tr>
-                                <td class="rank">#3</td>
-                                <td class="user-name">Nolen</td>
-                                <td class="diamond-points">374</td>
-                            </tr>
-                            <tr>
-                                <td class="rank">#4</td>
-                                <td class="user-name">Selava Ragavan</td>
-                                <td class="diamond-points">352</td>
-                            </tr>
-                            <tr>
-                                <td class="rank">#5</td>
-                                <td class="user-name">Munaf Patel</td>
-                                <td class="diamond-points">343</td>
-                            </tr>
+                            {% endfor %}
                         </table>
                     </div>
                 </div>
@@ -159,19 +145,19 @@
                         <div class="streak-container border">
                             <p class="streak-title">தொடர்ந்து கற்றல் </p>
                             <div class="streak-circle">
-                                <p class="streak-value"><span id="streak-value">13</span><br>நாட்கள்</p>
+                                <p class="streak-value"><span id="streak-value">{{ streak }}</span><br>நாட்கள்</p>
                             </div>
                         </div>
                     </div>
                     <div class="learnt-kural">
                         <div class="kural-container border">
                             <p class="learnt-kural-title">கற்ற குறள்கள் </p>
-                            <p class="learnt-kural-value"><span id="completed-kural">133</span></p>
+                            <p class="learnt-kural-value"><span id="completed-kural">{{ learnt_kural_count }}</span></p>
                         </div>
                     </div>
                     <div class="last-aadhikaram">
                         <div class="aadhikaram-container border">
-                            <p class="aadhikaram-title">அன்புடைமை</p>
+                            <p class="aadhikaram-title">{{ last_adhigaram }}</p>
                             <div class="progress-bar" id="progress-bar">
                                 <div class="progress" id="progress">
                                     0
@@ -182,9 +168,9 @@
                 </div>
             </div>
         </div>
-     </div>
-        <script src="/static/js/jquery.js"></script>
-        <script src="/static/js/scripts.js"></script>
+    </div>
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/scripts.js"></script>
     <footer>MuthirAI Tamil NLP Project, Thiagarajar College of Engineering Madurai, India.</footer>
 </body>
 

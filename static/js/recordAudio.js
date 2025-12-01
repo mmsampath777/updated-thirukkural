@@ -151,27 +151,26 @@ function createDownloadLink(blob) {
         var xhr = new XMLHttpRequest();
         xhr.onload = function (e) {
             if (this.readyState === 4) {
-                var response = e.target.responseText;
+                var response = JSON.parse(e.target.responseText);
                 console.log(response);
-                // var result = JSON.parse(response.trim());
-                // console.log(result);
 
-                // var count = result['count'];
-                // var star = result['stars'];
+                var count = response.count;
+                var star = response.stars;
 
-                var result = response.trim().split(',');
-                console.log(result);
-                // result = JSON.parse(result);
-                // console.log(result);
-
-                var count = result[1];
-                var star = result[0];
                 console.log(count);
                 console.log(star);
+
                 document.getElementById('starCount').innerHTML = star;
                 document.getElementById('wordCount').innerHTML = count;
                 openPopup();
                 document.getElementById('kural-audio-file').style.display = 'none';
+
+                if (response.take_test) {
+                    setTimeout(function () {
+                        alert("Congratulations! You have learned 10 Kurals. It's time for a test!");
+                        window.location.href = response.test_url;
+                    }, 2000); // Wait 2 seconds before redirecting
+                }
             }
 
         };

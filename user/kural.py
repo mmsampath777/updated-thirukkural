@@ -16,6 +16,15 @@ class kural:
             adhigaram = adhigaram_data.find(
                 query, {"_id": 0, "adhigaram_id": 1})
             adhigaram_list = list(adhigaram)
+            
+            # Update last accessed adhigaram
+            session['user']['last_accessed_adhigaram'] = select_adhigaram
+            db.user_details.update_one(
+                {"email": session['user']['email']},
+                {"$set": {"last_accessed_adhigaram": select_adhigaram}}
+            )
+            session.modified = True
+            
             return jsonify({"adhigaram_id": adhigaram_list[0]["adhigaram_id"]}), 200
 
     def learn_thirukkural(self):
@@ -122,7 +131,7 @@ class kural:
                     diamonds = 0
 
             if (diamonds > 0):
-                adhigaram_number = str(int(kuralId) % 10)
+                adhigaram_number = str((int(kuralId) - 1) // 10)
                 total = 0
                 if (int(session['user']['points']['diamonds']['drag_drop'][int(adhigaram_number)]) < int(session['user']['points']['diamonds']['total']) + diamonds):
                     total = (int(session['user']['points']['diamonds']['total']) + diamonds) - int(
@@ -189,7 +198,7 @@ class kural:
             diamonds = 0
             if(kuralWordsList[int(answerIndex)] == answer):
                 diamonds = 2
-                adhigaram_number = str(int(kuralId) % 10)
+                adhigaram_number = str((int(kuralId) - 1) // 10)
 
                 if (int(session['user']['points']['diamonds']['fillups'][int(adhigaram_number)]) < int(session['user']['points']['diamonds']['total']) + diamonds):
                     total = (int(session['user']['points']['diamonds']['total']) + diamonds) - int(

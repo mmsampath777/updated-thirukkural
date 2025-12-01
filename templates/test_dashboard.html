@@ -1,0 +1,233 @@
+<html lang="ta">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard - திருக்குறள் பழகு</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Meera+Inimai&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/basicStyle.css') }}">
+    <style>
+        body {
+            overflow: hidden;
+            /* Prevent body scroll */
+        }
+
+        .dashboard-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100vh;
+            /* Full height */
+            overflow-y: auto;
+            /* Scrollable content */
+            padding-bottom: 100px;
+            /* Space for scrolling */
+            box-sizing: border-box;
+        }
+
+        /* Custom Scrollbar for Webkit */
+        .dashboard-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .dashboard-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .dashboard-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .dashboard-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .dashboard-title {
+            text-align: center;
+            font-family: 'Meera Inimai', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #4a4a4a;
+            text-shadow: 1px 1px 2px white;
+            /* Better visibility on bg */
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .adhigaram-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .adhigaram-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .adhigaram-card.locked {
+            opacity: 0.7;
+            background-color: #f5f5f5;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .adhigaram-number {
+            background: #e0e0e0;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .adhigaram-name {
+            font-family: 'Meera Inimai', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .progress-section {
+            margin-bottom: 15px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar-bg {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: #4CAF50;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .test-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Meera Inimai', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .test-btn.unlocked {
+            background: #2196F3;
+            color: white;
+        }
+
+        .test-btn.unlocked:hover {
+            background: #1976D2;
+        }
+
+        .test-btn.locked {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .back-link {
+            display: block;
+            margin-bottom: 20px;
+            color: #2196F3;
+            text-decoration: none;
+            font-family: 'Meera Inimai', sans-serif;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            width: fit-content;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="navbar-container">
+            <nav class="">
+                <img src="../static/images/muthir-logo.png" alt="Muthir AI" height="120px" width="120px">
+                <ul class="">
+                    <li class="nav-cell">
+                        <a href="/index/">
+                            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                class="bi bi-house-door" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
+                                <path fill-rule="evenodd"
+                                    d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="dashboard-container">
+            <a href="/index/" class="back-link">← பின் செல்ல (Back to Dashboard)</a>
+            <h1 class="dashboard-title">தேர்வு பலகை (Test Dashboard)</h1>
+
+            <div class="cards-grid">
+                {% for adhigaram in adhigarams %}
+                {% set learned = progress.get(adhigaram.adhigaram_id, 0) %}
+                {% set is_unlocked = learned >= 10 %}
+
+                <div class="adhigaram-card {% if not is_unlocked %}locked{% endif %}">
+                    <div class="card-header">
+                        <span class="adhigaram-number">#{{ adhigaram.adhigaram_id }}</span>
+                        {% if is_unlocked %}
+                        <span style="color: #4CAF50;">🔓</span>
+                        {% else %}
+                        <span style="color: #999;">🔒</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="adhigaram-name">{{ adhigaram.adhigaram }}</div>
+
+                    <div class="progress-section">
+                        <div class="progress-text">கற்றவை: {{ learned }}/10</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: {{ (learned / 10) * 100 }}%"></div>
+                        </div>
+                    </div>
+
+                    {% if is_unlocked %}
+                    <a href="/take_adhigaram_test/{{ adhigaram.adhigaram_id }}">
+                        <button class="test-btn unlocked">தேர்வு எழுதுக</button>
+                    </a>
+                    {% else %}
+                    <button class="test-btn locked" disabled>பூட்டப்பட்டுள்ளது</button>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,138 @@
+<html lang="ta">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Report - திருக்குறள் பழகு</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Meera+Inimai&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/basicStyle.css') }}">
+    <style>
+        body {
+            overflow: hidden;
+            /* Prevent body scroll */
+        }
+
+        .report-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 90vh;
+            /* Fixed height */
+            overflow-y: auto;
+            /* Scrollable */
+            margin-top: 20px;
+        }
+
+        /* Custom Scrollbar */
+        .report-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .report-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .report-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .report-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .score-card {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .score-large {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .recommendation {
+            font-family: 'Meera Inimai', sans-serif;
+            font-size: 1.2rem;
+            color: #555;
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .result-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item.correct {
+            background-color: #f1f8e9;
+        }
+
+        .result-item.wrong {
+            background-color: #ffebee;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-family: 'Meera Inimai', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="navbar-container">
+            <nav class="">
+                <img src="../static/images/muthir-logo.png" alt="Muthir AI" height="120px" width="120px">
+            </nav>
+        </div>
+
+        <div class="report-container">
+            <h1 style="text-align: center; font-family: 'Meera Inimai', sans-serif;">தேர்வு முடிவுகள் (Test Results)
+            </h1>
+
+            <div class="score-card">
+                <div class="score-large">{{ score }} / {{ total }}</div>
+                <div class="recommendation">{{ recommendation }}</div>
+            </div>
+
+            <h2 style="font-family: 'Meera Inimai', sans-serif;">விவரமான அறிக்கை (Detailed Report)</h2>
+
+            {% for res in results %}
+            <div class="result-item {% if res.is_correct %}correct{% else %}wrong{% endif %}">
+                <p><strong>கேள்வி:</strong> {{ res.question }}</p>
+                <p><strong>உங்கள் பதில்:</strong> {{ res.user_answer }}
+                    {% if res.is_correct %}✅{% else %}❌{% endif %}
+                </p>
+                {% if not res.is_correct %}
+                <p><strong>சரியான பதில்:</strong> {{ res.correct_answer }}</p>
+                {% endif %}
+                <p style="font-size: 0.9rem; color: #666;"><em>பொருள்: {{ res.porul }}</em></p>
+            </div>
+            {% endfor %}
+
+            <div style="text-align: center;">
+                <a href="/test_dashboard" class="back-btn">மீண்டும் தேர்வு பலகைக்குச் செல்க (Back to Dashboard)</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
